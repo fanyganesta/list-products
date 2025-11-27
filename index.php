@@ -1,3 +1,10 @@
+<?php 
+    require 'controller.php';
+    checkLogin();
+
+
+?>
+
 <!DOCTYPE html>
 <html> 
 <head> 

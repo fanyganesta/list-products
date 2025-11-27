@@ -5,7 +5,7 @@
     $data = $_GET['data'] ?? null;
 
     if($data == 'products'){
-        $checkTable = "SELECT table_name FROM information_schema.tables WHERE table_name = 'products'";
+        $checkTable = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'list_products' AND table_name = 'products'";
         $dbTable = dbPrepare($checkTable);
         
         if(mysqli_num_rows($dbTable) < 1){ 
@@ -42,19 +42,39 @@
             exit;
         }   
     }elseif($data == 'users'){
-        $checkUsers = "SELECT table_name FROM information_schema.tables WHERE table_name = 'users'";
-        $result = dbPrepare($checkUsers);
-        if(mysqli_num_rows($result) < 1){
-            $createUsers;
+        $checkUsers = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'list_products' AND table_name = 'users'";
+        $tableUsers = dbPrepare($checkUsers);
+        if(mysqli_num_rows($tableUsers) < 1){
+            $createUsers = "CREATE TABLE users (
+                ID INT PRIMARY KEY AUTO_INCREMENT,
+                username VARCHAR(100),
+                password VARCHAR(255)
+            )";
+            $result = dbPrepare($createUsers);
+            if(!$result){
+                header("Location: login.php?error=Periksa sintaks");
+                exit;
+            }
+        }
+        $password = password_hash('123', PASSWORD_DEFAULT);
+        $insertUsers = "INSERT INTO users VALUE (
+            '', 'fany', '$password'
+        )";
+        $result = dbPrepare($insertUsers);
+        if($result){
+            header("Location: login.php?message=Data users berhasil ditambahkan");
+            exit;
         }else{
-
+            header("Location: login.php?error=Data gagal ditambahkan, periksa sintaks");
+            exit;
         }
     }else{
         header("Location: login.php?error=Masukkan perintah apa yang mau ditambah");
         exit;
     }
 
-    function dbPrepare($query){
+
+    function dbPrepare($query, $param = null, $value = null){
         global $db;
         $prepQuery = $db->prepare($query);
         if(!isset($prepQuery)){
