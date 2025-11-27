@@ -2,7 +2,9 @@
     require 'controller.php';
     global $db;
 
-    if(isset($_GET['data']) == 'products'){
+    $data = $_GET['data'] ?? null;
+
+    if($data == 'products'){
         $checkTable = "SELECT table_name FROM information_schema.tables WHERE table_name = 'products'";
         $dbTable = dbPrepare($checkTable);
         
@@ -39,6 +41,17 @@
             header("Location: login.php?error=Data gagal diproses");
             exit;
         }   
+    }elseif($data == 'users'){
+        $checkUsers = "SELECT table_name FROM information_schema.tables WHERE table_name = 'users'";
+        $result = dbPrepare($checkUsers);
+        if(mysqli_num_rows($result) < 1){
+            $createUsers;
+        }else{
+
+        }
+    }else{
+        header("Location: login.php?error=Masukkan perintah apa yang mau ditambah");
+        exit;
     }
 
     function dbPrepare($query){
