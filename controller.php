@@ -58,7 +58,7 @@
         }
     }
 
-    function dbPrepare($query, $param = null, $value = null){
+    function dbPrepare($query, $param = null, $value = null, $stack = null){
         global $db;
         $checker = explode(' ', $query)[0];
         $prepQuery = $db->prepare($query);
@@ -69,9 +69,21 @@
             return $prepQuery->execute();
         }
         $prepQuery->execute();
-        $result = $prepQuery->get_result(); 
+        $result = $prepQuery->get_result();
+        if($checker == 'SELECT' && isset($stack)){
+            $rows = [];
+            while($fetch = $result->fetch_assoc()){
+                $rows[] = $fetch;
+            }
+            $result = $rows;
+        }
         return $result;
     }
 
 
+    function index(){
+        $query = "SELECT * FROM products";
+        $result = dbPrepare($query, null, null, true);
+        return $result;
+    }
 ?>

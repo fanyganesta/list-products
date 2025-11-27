@@ -1,8 +1,7 @@
 <?php 
     require 'controller.php';
     checkLogin();
-
-
+    $rows= index();
 ?>
 
 <!DOCTYPE html>
@@ -19,6 +18,9 @@
     <?php endif ?>
 
     <h3> Selamat datang</h3>
+    <a href="tambah.php">Tambah Data</a> <p style="display: inline">|</p>
+    <a href="logout.php">Keluar</a>
+    <br> <br>
     <table class="br"> 
         <tr>
             <th> No. </th>
@@ -27,12 +29,14 @@
             <th> Jumlah Barang</th>
             <th> Harga Barang</th>
         </tr>
-        <tr> 
-            <td class="ct"> </td>
-            <td class="ct"> </td>
-            <td class="ct"> </td>
-            <td class="ct"> </td>
-            <td class="ct"> </td>
-        </tr>
+        <?php $i = 1; foreach($rows as $row) : ?>
+            <tr> 
+                <td class="ct"> <?= $i ?> </td>
+                <td class="ct"> <?= $row['namaProduk'];?> </td>
+                <td class="ct"> <?= $row['varianProduk'] ?> </td>
+                <td class="ct"> <?= $row['jumlahProduk'] ?> </td>
+                <td class="ct"> <?= $row['hargaProduk']; $i++ ?> </td>
+            </tr>
+        <?php endforeach ?>
     </table>
 </body>
