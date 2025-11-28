@@ -74,22 +74,22 @@
     }
 
 
-    function dbPrepare($query, $param = null, $value = null){
-        global $db;
-        $prepQuery = $db->prepare($query);
-        if(!isset($prepQuery)){
-            header("Location: login.php?error=Gagal, cek sintaks SQL");
-            exit;
-        }
+    // function dbPrepare($query, $param = null, $value = null){
+    //     global $db;
+    //     $prepQuery = $db->prepare($query);
+    //     if(!isset($prepQuery)){
+    //         header("Location: login.php?error=Gagal, cek sintaks SQL");
+    //         exit;
+    //     }
 
-        $queryExplode = explode(' ', $query)[0];
-        if($queryExplode == 'INSERT'){
-           return $prepQuery->execute();
-        }
-        $prepQuery->execute();
-        $result = $prepQuery->get_result();
-        return $result;
-    }
+    //     $queryExplode = explode(' ', $query)[0];
+    //     if($queryExplode == 'INSERT'){
+    //        return $prepQuery->execute();
+    //     }
+    //     $prepQuery->execute();
+    //     $result = $prepQuery->get_result();
+    //     return $result;
+    // }
 
 
 

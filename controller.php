@@ -82,8 +82,21 @@
 
 
     function index(){
-        $query = "SELECT * FROM products";
+        $limit = 10;
+        global $db;
+        $totalDatas = mysqli_num_rows(mysqli_query($db, "SELECT * FROM products"));
+        $jumlahHalaman = ceil($totalDatas / $limit);
+        $halaman = $_GET['halaman'] ?? null;
+        if(!$halaman || $halaman < 1 ){
+            $halamanAktif = 1;
+        }else{
+            $halamanAktif = $_GET['halaman'];
+        }
+        $index = $halamanAktif * $limit - $limit;
+
+        $query = "SELECT * FROM products LIMIT $index, $limit";
         $result = dbPrepare($query, null, null, true);
+        $result = [$result, $halamanAktif, $jumlahHalaman];
         return $result;
     }
 ?>
