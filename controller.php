@@ -99,4 +99,27 @@
         $result = [$result, $halamanAktif, $jumlahHalaman];
         return $result;
     }
+
+
+    function tambah(){
+        $data = $_POST;
+        $namaProduk = htmlspecialchars($data['namaProduk']);
+        $varianProduk = htmlspecialchars($data['varianProduk']);
+        $jumlahProduk = htmlspecialchars($data['jumlahProduk']);
+        $hargaProduk = htmlspecialchars($data['hargaProduk']);
+        $image = $_FILES['image'];
+
+        $queryTambah = "INSERT INTO products (namaProduk, varianProduk, JumlahProduk, hargaProduk) VALUE(
+            ?, ?, ?, ?
+        )";
+        
+        $result = dbPrepare($queryTambah, 'ssss', [$namaProduk, $varianProduk, $jumlahProduk, $hargaProduk], null);
+        if($result){
+            header("Location: index.php?message=Data berhasil ditambahkan");
+            exit;
+        }else{
+            header("Location: Gagal, periksa sintaks/code");
+            exit;
+        }
+    }
 ?>
