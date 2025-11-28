@@ -65,7 +65,7 @@
         if($param){
             $prepQuery->bind_param($param, ...$value);    
         }
-        if($checker == 'INSERT'){
+        if($checker == 'INSERT' || $checker == 'UPDATE' || $checker == 'DELETE'){
             return $prepQuery->execute();
         }
         $prepQuery->execute();
@@ -139,6 +139,9 @@
 
 
     function fileProcessing($data){
+        if($data['error'] == 4){
+            return $fileName = null;
+        }
         $allowedExt = 'webp';
         $namaFile = $_FILES['image']['name'];
         $explodeName = explode('.', $namaFile);
@@ -153,7 +156,7 @@
             header("Location: index.php?error=File terlalu besar");
             exit;
         }
-        $fileNewName = uniqid($explodeName[0]) . $extention;
+        $fileNewName = uniqid($explodeName[0]) . '.' . $extention;
         move_uploaded_file($_FILES['image']['tmp_name'], 'img/'.$fileNewName);
 
         return $fileNewName;
@@ -183,6 +186,12 @@
 
         $result = dbPrepare($queryUpdate, 'ssssss', [$namaProduk, $varianProduk, $jumlahProduk, $hargaProduk, $image, $ID], null);
 
-        var_dump($result);die;
+        if($result){
+            header("Location: index.php?message=Data berhasil dirubah");
+            exit;
+        }else{
+            header("Location: index.php?message=Data gagal dirubah");
+            exit;
+        }
     }
 ?>

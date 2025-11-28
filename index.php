@@ -33,6 +33,7 @@
             </table>
             <?php else : ?>
                 <th> No. </th>
+                <th> Foto Produk </th>
                 <th> Nama Barang </th>
                 <th> Variasi </th>
                 <th> Jumlah Barang</th>
@@ -42,6 +43,14 @@
             <?php $i = 1; foreach($rows as $row) : ?>
                 <tr> 
                     <td class="ct"> <?= $i ?> </td>
+                    <td class="ct">
+                        <?php if(isset($row['img'])) : ?>   
+                            <img src="img/<?= $row['img'] ?>" width=150>
+                        </td>
+                        <?php else : ?>
+                            <p style="font-style:italic"> (Gambar belum tersedia)</p>
+                        </td>
+                        <?php endif ?>
                     <td class="ct"> <?= $row['namaProduk'];?> </td>
                     <td class="ct"> <?= $row['varianProduk'] ?> </td>
                     <td class="ct"> <?= $row['jumlahProduk'] ?> </td>
@@ -55,7 +64,7 @@
             <?php endforeach ?>
             <?php if($jumlahHalaman > 1) : ?>
                 <tr>
-                    <th colspan="6">
+                    <th colspan="7">
                         <?php if($halamanAktif > 1) : ?>
                             <a href="?halaman=<?= $halamanAktif - 1 ?>" style="font-size: 12px"> <</a>
                         <?php endif ?>                            

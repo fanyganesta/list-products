@@ -37,7 +37,7 @@
             </tr>
             <tr> 
                 <td> <label for="image">Upload File:</label> </td>
-                <td> <input type="file" name="image" id="image" required> </td>
+                <td> <input type="file" name="image" id="image"> </td>
             <tr> 
                 <td colspan="2" class="ct">
                     <button type="submit" name="btn-tambah">Tambah</button>
