@@ -107,13 +107,14 @@
         $varianProduk = htmlspecialchars($data['varianProduk']);
         $jumlahProduk = htmlspecialchars($data['jumlahProduk']);
         $hargaProduk = htmlspecialchars($data['hargaProduk']);
-        $image = $_FILES['image'];
+        $image = fileProcessing($_FILES['image']);
 
-        $queryTambah = "INSERT INTO products (namaProduk, varianProduk, JumlahProduk, hargaProduk) VALUE(
-            ?, ?, ?, ?
+
+        $queryTambah = "INSERT INTO products (namaProduk, varianProduk, JumlahProduk, hargaProduk, img) VALUE(
+            ?, ?, ?, ?, ?
         )";
         
-        $result = dbPrepare($queryTambah, 'ssss', [$namaProduk, $varianProduk, $jumlahProduk, $hargaProduk], null);
+        $result = dbPrepare($queryTambah, 'sssss', [$namaProduk, $varianProduk, $jumlahProduk, $hargaProduk, $image], null);
         if($result){
             header("Location: index.php?message=Data berhasil ditambahkan");
             exit;
@@ -121,5 +122,67 @@
             header("Location: Gagal, periksa sintaks/code");
             exit;
         }
+    }
+
+
+    function get_ubah(){
+        if(!isset($_GET['ID'])){
+            header("Location: index.php?error=Pilih data yang akan dirubah dahulu");
+            exit;
+        }
+
+        $queryGet = "SELECT * FROM products WHERE ID = ?";
+        $result = dbPrepare($queryGet, 's', [$_GET['ID']], true);
+        return $result;
+    }
+
+
+
+    function fileProcessing($data){
+        $allowedExt = 'webp';
+        $namaFile = $_FILES['image']['name'];
+        $explodeName = explode('.', $namaFile);
+        $extention = strtolower(end($explodeName));
+        if($extention != $allowedExt){
+            header("Location: index.php?error=Gambar tidak diperbolehkan");
+            exit;
+        }
+        $size = $_FILES['image']['size'];
+        $allowedSize = 100000;
+        if($size >= $allowedSize){
+            header("Location: index.php?error=File terlalu besar");
+            exit;
+        }
+        $fileNewName = uniqid($explodeName[0]) . $extention;
+        move_uploaded_file($_FILES['image']['tmp_name'], 'img/'.$fileNewName);
+
+        return $fileNewName;
+    }
+
+
+    function ubah(){
+        $ID = $_POST['ID'];
+        $oldImage = htmlspecialchars($_POST['oldImg']) ?? null;
+        $namaProduk = htmlspecialchars($_POST['namaProduk']);
+        $varianProduk = htmlspecialchars($_POST['varianProduk']);
+        $jumlahProduk = htmlspecialchars($_POST['jumlahProduk']);
+        $hargaProduk = htmlspecialchars($_POST['hargaProduk']);
+        $file = $_FILES['image'];
+
+        if(!$oldImage && $file['error'] == 4){
+            $image = null;
+        }elseif($file['error'] == 4){
+            $image = $oldImage;
+        }else{
+            $image = fileProcessing($file);
+        }
+        
+        $queryUpdate = "UPDATE products SET
+            namaProduk = ?, varianProduk = ?, jumlahProduk = ?, hargaProduk = ?, img = ?
+         WHERE ID = ?";
+
+        $result = dbPrepare($queryUpdate, 'ssssss', [$namaProduk, $varianProduk, $jumlahProduk, $hargaProduk, $image, $ID], null);
+
+        var_dump($result);die;
     }
 ?>

@@ -37,6 +37,7 @@
                 <th> Variasi </th>
                 <th> Jumlah Barang</th>
                 <th> Harga Barang</th>
+                <th> Action </th>
             </tr>
             <?php $i = 1; foreach($rows as $row) : ?>
                 <tr> 
@@ -45,18 +46,23 @@
                     <td class="ct"> <?= $row['varianProduk'] ?> </td>
                     <td class="ct"> <?= $row['jumlahProduk'] ?> </td>
                     <td class="ct"> <?= $row['hargaProduk']; $i++ ?> </td>
+                    <td class="ct"> 
+                        <a href="ubah.php?ID=<?= $row['ID']?>">Ubah</a> 
+                        <p style="display:inline">|</p>
+                        <a href="hapus.php?ID=<?= $row['ID']?>" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+                    </td>
                 </tr>
             <?php endforeach ?>
             <?php if($jumlahHalaman > 1) : ?>
                 <tr>
-                    <th colspan="5">
+                    <th colspan="6">
                         <?php if($halamanAktif > 1) : ?>
                             <a href="?halaman=<?= $halamanAktif - 1 ?>" style="font-size: 12px"> <</a>
                         <?php endif ?>                            
                         <?php for($j = 1; $j <= $jumlahHalaman; $j++): ?>
                             <?php if($j < $halamanAktif+2 && $j > $halamanAktif-2) : ?>
                                 <?php if($j == $halamanAktif) : ?>
-                                    <p style="color:red; font-weight:bold; font-size:19px; display:inline;"><?= $j?></p>
+                                    <p style="color:black; font-weight:bold; font-size:19px; display:inline;"><?= $j?></p>
                                 <?php else : ?>
                                     <a href="?halaman=<?= $j?>"> <?= $j ?></a>
                                 <?php endif ?>
