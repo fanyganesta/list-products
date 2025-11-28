@@ -2,9 +2,13 @@
     require 'controller.php';
     checkLogin();
     $result = index();
+    if(isset($_POST['cari'])){
+        $result = cari();
+    }
     $rows = $result[0];
     $jumlahHalaman = $result[2];
     $halamanAktif = $result[1];
+    $cari = $result[3] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +29,14 @@
     <a href="tambah.php">Tambah Data</a> <p style="display: inline">|</p>
     <a href="logout.php">Keluar</a>
     <br> <br>
+
+    <form method="POST" action="index.php">
+        <label for="cari"> Cari Produk:</label>
+        <input type="text" name="cari" id="cari" value="<?= $cari ?>">
+        <button type="submit" name="btn-cari">Cari</button>
+    </form>
+
+    <br>
     <table class="br"> 
         <tr>
             <?php if(count($rows) < 1) : ?>

@@ -194,4 +194,23 @@
             exit;
         }
     }
+
+
+
+    function cari(){
+        $queryCari = "SELECT * FROM products WHERE 
+        namaProduk LIKE ? ||
+        hargaProduk LIKE ? ||
+        jumlahProduk LIKE ? ||
+        varianProduk LIKE ?
+        ";
+        $text = '%'.$_POST['cari'].'%';
+        $datas = [];
+        for($i = 0; $i < 4; $i++){
+            $datas[] = $text;
+        }
+        $result = dbPrepare($queryCari, 'ssss', $datas, true);
+        $result = [$result, 1, 1, $_POST['cari']];
+        return $result;
+    }
 ?>
